@@ -1,10 +1,10 @@
 
-#include <LiquidCrystal.h>  // Kirjasto näytölle  
-#include <RH_ASK.h>         // kirjasto ASK-modulaatioon
-#include <SPI.h>            // Kirjasto synkroniseen tiedonsiirtoon
+#include <LiquidCrystal.h> 
+#include <RH_ASK.h>         // ASK-modulaatio
+#include <SPI.h>            // Synkroninen tiedonsiirto
 
 LiquidCrystal lcd(3, 4, 7, 8, 9, 10);    // Näyttö, määritellään portit
-RH_ASK rf_receiver;                      // ASK-olio
+RH_ASK rf_receiver;                      // ASK instanssi
 char tempArr[]="Temp:";
 char minArr[]="MIN";
 char maxArr[]="MAX";
@@ -15,7 +15,7 @@ double min;
 
 // Alustukset
 void setup(){ 
-    lcd.begin(16,2);        // 16x2 näyttöalue
+    lcd.begin(16,2);        // lcd alustus
     lcd.clear();
     rf_receiver.init();
     /* Printataan näytölle "Temp:"
@@ -40,7 +40,7 @@ void setup(){
 void loop(){
     uint8_t packet[5];
     uint8_t packetSize = sizeof(packet);
-    // Tarkastetaan datan oikea koko
+    // Tarkastetaan datan koko
     if (rf_receiver.recv(packet, &packetSize)){
       lcd.setCursor(6,0);
       String s = String((char*)packet);
@@ -62,7 +62,7 @@ void loop(){
           lcd.print(min);          
         }
       } else {
-      max = temperature;  // Asetetaan oletusarvot, jos null, ja printataan näytölle
+      max = temperature;  // Asetetaan oletusarvot (jos null), ja printataan näytölle
       lcd.setCursor(11,1);
       lcd.print(max);  
       min = temperature;
